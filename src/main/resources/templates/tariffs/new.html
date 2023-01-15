@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>New tariff</title>
+</head>
+
+<body>
+
+    <!--/*@thymesVar id="tariff" type="com.teapot.mrw.billing_ne.model.Tariff"*/-->
+    <form th:method="POST" th:action="@{/tariffs}" th:object="${tariff}">
+
+        <label for="name">Введите название: </label>
+        <input type="text" th:field="*{name}" id="name"/>
+        <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+
+        <br/>
+
+        <label for="price">Введите стоимость: </label>
+        <input type="text" th:field="*{price}" id="price"/>
+        <div style="color:red" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Price Error</div>
+
+        <br/>
+
+        <label th:for="active">Тариф активен?</label>
+        <input type="checkbox" name="active" th:checked="*{active}" />
+
+        <br/>
+
+        <input type="submit" value="Create!"/>
+    </form>
+
+    <form th:method="GET" th:action="@{/lk/}">
+        <input type="submit" value="Вернуться в личный кабинет"/>
+    </form>
+
+    <form th:href="@{#}" th:onclick="history.go(-1)">
+        <input type="submit" value="Вернуться на предыдущую страницу"/>
+    </form>
+
+</body>
+
+</html>

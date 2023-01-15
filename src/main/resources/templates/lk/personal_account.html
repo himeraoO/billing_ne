@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Personal account</title>
+</head>
+
+<body>
+
+    <!--/*@thymesVar id="client" type="com.teapot.mrw.billing_ne.model.Client"*/-->
+    <p th:text="'Здравствуйте! ' + ${client.getName() + ', ' + client.getSurname()}">VALUE</p>
+    <p th:text="'Ваша дата рождения ' + ${client.getDateOfBirth()}">DATE OF BIRTH</p>
+    <p th:text="'Ваш паспорт ' + ${client.getPassportData()}">PASSPORT</p>
+    <p th:text="'Ваш адрес ' + ${client.getAddress()}">ADDRESS</p>
+    <p th:text="'Ваш email (он же логин для входа в личный кабинет) ' + ${client.getEmail()}">EMAIL</p>
+
+    <div th:if="${client.contractList.isEmpty()}">
+        <p>У Вас нет подключенных контрактов</p>
+        <hr/>
+    </div>
+
+    <div th:if="${!client.contractList.isEmpty()}">
+        <hr/>
+        <b>Ваши контракты (номера):</b>
+        <br/>
+        <table th:each="contract : ${client.contractList}">
+            <a th:href="@{/contracts/{id}(id=${contract.getId()})}"
+               th:text="${contract.getNumber()}">contract</a>
+        </table>
+        <hr/>
+    </div>
+
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <form th:method="GET" th:action="@{/clients/}">
+            <input type="submit" value="Просмотр всех клиентов"/>
+        </form>
+        <form th:method="GET" th:action="@{/contracts/}">
+            <input type="submit" value="Просмотр всех контрактов"/>
+        </form>
+        <form th:method="GET" th:action="@{/tariffoptions/}">
+            <input type="submit" value="Просмотр всех тарифных опций"/>
+        </form>
+    </div>
+
+    <form th:method="GET" th:action="@{/tariffs/}">
+        <input type="submit" value="Просмотр всех тарифов"/>
+    </form>
+
+    <hr/>
+    <form th:method="GET" th:action="@{/clients/{id}/edit(id=${client.getId()})}">
+        <input type="submit" value="Редактировать"/>
+    </form>
+    <hr/>
+    <form th:method="GET" th:action="@{/lk/change_password}">
+        <input type="submit" value="Изменить пароль"/>
+    </form>
+    <hr/>
+
+    <form th:action="@{/logout}" th:method="POST">
+        <input type="submit" value="Logout" />
+    </form>
+
+</body>
+
+</html>

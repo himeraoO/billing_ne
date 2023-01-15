@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>New contract</title>
+</head>
+
+<body>
+    <!--/*@thymesVar id="contract" type="com.teapot.mrw.billing_ne.model.Contract"*/-->
+    <form th:method="POST" th:action="@{/contracts}" th:object="${contract}">
+
+        <label for="number">Введите номер: </label>
+        <input type="text" th:field="*{number}" id="number"/>
+        <div style="color:red" th:if="${#fields.hasErrors('number')}" th:errors="*{number}">Number Error</div>
+
+        <br/>
+        <!--/*@thymesVar id="tariffList" type="java.util.List<com.teapot.mrw.billing_ne.model.Tariff>"*/-->
+        <div th:if="${!tariffList.isEmpty}">
+            <span>Какой тариф подключить?</span>
+            <label for="tariff">Выберите тариф для подключения</label>
+            <select th:field="*{tariff}" id="tariff">
+                <option th:each="tariff : ${tariffList}" th:value="${tariff.getId()}" th:text="${tariff.getName()}">
+                </option>
+            </select>
+        </div>
+        <!--/*@thymesVar id="clientList" type="java.util.List<com.teapot.mrw.billing_ne.model.Client>"*/-->
+        <div th:if="${!clientList.isEmpty}">
+            <span>Какого клиента подключить?</span>
+            <label for="client">Выберите клиента</label>
+            <select th:field="*{client}" id="client">
+                <option th:each="client : ${clientList}" th:value="${client.getId()}" th:text="${client.getName()}">
+                </option>
+            </select>
+        </div>
+
+        <input type="submit" value="Create!"/>
+    </form>
+
+    <form th:method="GET" th:action="@{/lk/}">
+        <input type="submit" value="Вернуться в личный кабинет"/>
+    </form>
+
+    <form th:href="@{#}" th:onclick="history.go(-1)">
+        <input type="submit" value="Вернуться на предыдущую страницу"/>
+    </form>
+
+</body>
+
+</html>

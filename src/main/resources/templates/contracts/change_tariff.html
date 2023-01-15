@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Change tariff</title>
+</head>
+
+<body>
+    <hr/>
+    <!--/*@thymesVar id="contract" type="com.teapot.mrw.billing_ne.model.Contract"*/-->
+
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <p th:text="${'У клиента ' + contract.getClient().getName() + ' ' + contract.getClient().getSurname()}">VALUE</p>
+    </div>
+
+    <div sec:authorize="hasRole('ROLE_USER')">
+        <p th:text="${'Уважаемый клиент ' + contract.getClient().getName() + ' ' + contract.getClient().getSurname()}">VALUE</p>
+    </div>
+
+    <p th:text="${'Для контракта с номером: ' + contract.getNumber() + ', '}">VALUE</p>
+    <p th:text="${'в данный момент, установлен тариф: ' + contract.getTariff().getName()}">VALUE</p>
+
+    <hr/>
+
+    <p>Вы можете поменять тариф на следующие:</p>
+
+    <br/>
+
+    <!--/*@thymesVar id="tariffList" type="java.util.List<com.teapot.mrw.billing_ne.model.Tariff>"*/-->
+    <div th:if="${tariffList.isEmpty}">
+        <p>Нет тарифов доступных для подключения</p>
+        <hr/>
+    </div>
+
+    <!--/*@thymesVar id="tariff" type="com.teapot.mrw.billing_ne.model.Tariff"*/-->
+    <div th:if="${tariffList}">
+        <table th:each="tariff : ${tariffList}">
+            <tr th:text="${tariff.getName()}">tariff</tr>
+        </table>
+        <hr/>
+    </div>
+
+    <div th:if="${!tariffList.isEmpty}">
+        <span>Какой тариф подключить?</span>
+        <form th:method="PATCH" th:action="@{/contracts/{id}/change-tariff(id=${contract.getId()})}">
+            <label for="tariff">Выберите тариф для смены</label>
+            <select th:object="${tariff}" th:field="*{id}" id="tariff">
+                <option th:each="tariff : ${tariffList}" th:value="${tariff.getId()}" th:text="${tariff.getName()}">
+                </option>
+            </select>
+            <input type="submit" value="Подключить выбранный тариф"/>
+        </form>
+    </div>
+
+    <p>Несовместимые опции будут отключены</p>
+    <hr/>
+
+    <form th:method="GET" th:action="@{/lk/}">
+        <input type="submit" value="Вернуться в личный кабинет"/>
+    </form>
+
+    <form th:href="@{#}" th:onclick="history.go(-1)">
+        <input type="submit" value="Вернуться на предыдущую страницу"/>
+    </form>
+
+</body>
+
+</html>

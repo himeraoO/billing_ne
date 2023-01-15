@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+
+<body>
+
+    <!--/*@thymesVar id="contractsListPage" type="java.util.List<com.teapot.mrw.billing_ne.model.Contract>"*/-->
+    <div th:if="${contractsListPage}">
+        <div th:each="contract : ${contractsListPage}">
+            <a th:href="@{/contracts/{id}(id=${contract.getId()})}"
+               th:text="${contract.getNumber()}">contract</a>
+        </div>
+    </div>
+
+    <!--/*@thymesVar id="paging" type="java.lang.Boolean"*/-->
+    <div th:if="${paging}">
+        <!--/*@thymesVar id="page" type="java.lang.Integer"*/-->
+        <span th:if="${page}!=1">
+
+            <button th:data-nav="@{'/contracts/?page=1'}"
+                    onclick="window.location.href = this.getAttribute('data-nav');">Первая страница</button>
+
+            <button th:data-nav="@{'/contracts/?page=' + ${page - 1}}"
+                    onclick="window.location.href = this.getAttribute('data-nav');">Предыдущая страница</button>
+
+        </span>
+
+        <!--/*@thymesVar id="totalPage" type="java.lang.Integer"*/-->
+        <span th:if="${page}!=${totalPage}">
+
+            <button th:data-nav="@{'/contracts/?page=' + ${page + 1}}"
+                    onclick="window.location.href = this.getAttribute('data-nav');">Следующая страница</button>
+
+            <button th:data-nav="@{'/contracts/?page=' + ${totalPage}}"
+                    onclick="window.location.href = this.getAttribute('data-nav');">Последняя страница</button>
+
+        </span>
+    </div>
+
+    <br/>
+    <hr/>
+
+    <form th:method="GET" th:action="@{/contracts/new}">
+        <input type="submit" value="Добавить контракт"/>
+    </form>
+
+    <hr/>
+    <hr/>
+
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <form th:method="GET" th:action="@{/lk/}">
+            <input type="submit" value="Вернуться в личный кабинет"/>
+        </form>
+    </div>
+
+    <form th:href="@{#}" th:onclick="history.go(-1)">
+        <input type="submit" value="Вернуться на предыдущую страницу"/>
+    </form>
+
+</body>
+
+</html>

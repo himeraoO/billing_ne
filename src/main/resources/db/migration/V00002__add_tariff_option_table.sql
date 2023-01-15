@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS tariff_option;
+
+CREATE TABLE IF NOT EXISTS tariff_option (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(45) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    connection_cost DECIMAL(10,2) NOT NULL,
+    PRIMARY KEY (id))
+ENGINE = InnoDB;

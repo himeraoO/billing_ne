@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+</head>
+
+<body>
+
+    <!--/*@thymesVar id="tariffOption" type="com.teapot.mrw.billing_ne.model.TariffOption"*/-->
+    <p th:text="${tariffOption.getName() + ', ' + tariffOption.getPrice() + ', ' + tariffOption.getConnectionCost()}">VALUE</p>
+
+    <form th:method="GET" th:action="@{/tariffoptions/{id}/edit(id=${tariffOption.getId()})}">
+        <input type="submit" value="Редактировать"/>
+    </form>
+
+    <form th:method="DELETE" th:action="@{/tariffoptions/{id}(id=${tariffOption.getId()})}">
+        <input type="submit" value="Удалить"/>
+    </form>
+
+    <hr/>
+
+    <form th:method="GET" th:action="@{/tariffoptions/}">
+        <input type="submit" value="Все тарифные опций"/>
+    </form>
+
+    <hr/>
+
+    <form th:method="GET" th:action="@{/lk/}">
+        <input type="submit" value="Вернуться в личный кабинет"/>
+    </form>
+
+    <form th:href="@{#}" th:onclick="history.go(-1)">
+        <input type="submit" value="Вернуться на предыдущую страницу"/>
+    </form>
+
+</body>
+
+</html>

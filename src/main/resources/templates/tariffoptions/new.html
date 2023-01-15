@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>New tariff option</title>
+</head>
+
+<body>
+
+    <!--/*@thymesVar id="tariffOption" type="com.teapot.mrw.billing_ne.model.TariffOption"*/-->
+    <form th:method="POST" th:action="@{/tariffoptions}" th:object="${tariffOption}">
+
+        <label for="name">Введите название: </label>
+        <input type="text" th:field="*{name}" id="name"/>
+        <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+
+        <br/>
+
+        <label for="price">Введите стоимость: </label>
+        <input type="text" th:field="*{price}" id="price"/>
+        <div style="color:red" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Price Error</div>
+
+        <br/>
+
+        <label for="connectionCost">Введите стоимость: </label>
+        <input type="text" th:field="*{connectionCost}" id="connectionCost"/>
+        <div style="color:red" th:if="${#fields.hasErrors('connectionCost')}" th:errors="*{connectionCost}">ConnectionCost Error</div>
+
+        <br/>
+
+        <input type="submit" value="Create!"/>
+    </form>
+
+    <form th:method="GET" th:action="@{/lk/}">
+        <input type="submit" value="Вернуться в личный кабинет"/>
+    </form>
+
+    <form th:href="@{#}" th:onclick="history.go(-1)">
+        <input type="submit" value="Вернуться на предыдущую страницу"/>
+    </form>
+
+</body>
+
+</html>

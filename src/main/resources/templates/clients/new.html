@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>New client</title>
+</head>
+
+<body>
+    <!--/*@thymesVar id="client" type="com.teapot.mrw.billing_ne.model.Client"*/-->
+    <form th:method="POST" th:action="@{/clients}" th:object="${client}">
+        <label for="name">Введите имя: </label>
+        <input type="text" th:field="*{name}" id="name"/>
+        <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+
+        <br/>
+
+        <label for="surname">Введите фамилию: </label>
+        <input type="text" th:field="*{surname}" id="surname"/>
+        <div style="color:red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname Error</div>
+
+        <br/>
+
+        <label for="dateOfBirth">Введите дату рождения: </label>
+        <input type="text" th:field="*{dateOfBirth}" id="dateOfBirth"/>
+        <div style="color:red" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}">Date of birth Error</div>
+
+        <br/>
+
+        <label for="passportData">Введите номер паспорта: </label>
+        <input type="text" th:field="*{passportData}" id="passportData"/>
+        <div style="color:red" th:if="${#fields.hasErrors('passportData')}" th:errors="*{passportData}">Passport data Error</div>
+
+        <br/>
+
+        <label for="address">Введите адрес: </label>
+        <input type="text" th:field="*{address}" id="address"/>
+        <div style="color:red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address Error</div>
+
+        <br/>
+
+        <label for="email">Введите эмейл: </label>
+        <input type="text" th:field="*{email}" id="email"/>
+        <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
+        <br/>
+
+        <label for="password">Введите пароль: </label>
+        <input type="text" th:field="*{password}" id="password"/>
+        <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
+        <br/>
+
+        <input type="submit" value="Create!"/>
+    </form>
+
+    <form th:href="@{#}" th:onclick="history.go(-1)">
+        <input type="submit" value="Вернуться на предыдущую страницу"/>
+    </form>
+
+</body>
+
+</html>

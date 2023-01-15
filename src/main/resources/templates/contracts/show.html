@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+</head>
+
+<body>
+    <!--/*@thymesVar id="contract" type="com.teapot.mrw.billing_ne.model.Contract"*/-->
+    <p th:text="${contract.getNumber() + ', ' + contract.getClient().getName() + ', ' + contract.getTariff().getName()}">VALUE</p>
+    <a th:href="@{/tariffs/{id}(id=${contract.getTariff().getId()})}"
+       th:text="${contract.getTariff().getName()}">tariff</a>
+
+    <div th:if="${contract.active != true}">
+        <p>Контракт заблокирован</p>
+        <hr/>
+    </div>
+
+    <div th:if="${contract.active == true}">
+        <p>Контракт активен</p>
+        <hr/>
+
+            <div th:if="${contract.tariffOptionList.isEmpty()}">
+                <p>У контракта нет подключенных опций</p>
+                <hr/>
+            </div>
+
+            <div th:if="${!contract.tariffOptionList.isEmpty()}">
+                <b>Подключенные опции:</b>
+                <br/>
+                <table th:each="contractOption : ${contract.tariffOptionList}">
+                    <tr th:text="${contractOption.getName()}">contractOption</tr>
+                </table>
+                <hr/>
+
+                <div th:if="${contract.tariffOptionList.isEmpty}">
+                    <p>Нет опций доступных для отключения</p>
+                    <hr/>
+                </div>
+
+                <div th:if="${!contract.tariffOptionList.isEmpty}">
+                    <span>Какую опцию отключить?</span>
+                    <form th:method="PATCH" th:action="@{/contracts/{id}/release(id=${contract.getId()})}">
+                        <label for="contractOptionRemove">Выберите опцию для отключения</label>
+                        <!--/*@thymesVar id="contractOption" type="com.teapot.mrw.billing_ne.model.TariffOption"*/-->
+                        <select th:object="${contractOption}" th:field="*{id}" id="contractOptionRemove">
+                            <option th:each="contractOptionRemove : ${contract.tariffOptionList}" th:value="${contractOptionRemove.getId()}" th:text="${contractOptionRemove.getName()}">
+                            </option>
+                        </select>
+                        <input type="submit" value="Отключить опцию"/>
+                    </form>
+                </div>
+
+                <hr/>
+            </div>
+
+        <!--/*@thymesVar id="tariffOptions" type="java.util.List<com.teapot.mrw.billing_ne.model.TariffOption>"*/-->
+            <div th:if="${!tariffOptions.isEmpty}">
+                <span>Добавить новую опцию? Какую выбрать опцию?</span>
+                <form th:method="PATCH" th:action="@{/contracts/{id}/assign(id=${contract.getId()})}">
+                    <label for="contractOption">Выберите опцию</label>
+                    <!--/*@thymesVar id="contractOption" type="com.teapot.mrw.billing_ne.model.TariffOption"*/-->
+                    <select th:object="${contractOption}" th:field="*{id}" id="contractOption">
+                        <option th:each="contractOption : ${tariffOptions}" th:value="${contractOption.getId()}" th:text="${contractOption.getName()}">
+                        </option>
+                    </select>
+                    <input type="submit" value="Выбрать опцию"/>
+                </form>
+                <hr/>
+            </div>
+
+            <div th:if="${tariffOptions.isEmpty}">
+                <p>Нет опций доступных для подключения</p>
+                <hr/>
+            </div>
+    </div>
+
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+    <form th:method="GET" th:action="@{/contracts/{id}/edit(id=${contract.getId()})}">
+        <input type="submit" value="Редактировать"/>
+    </form>
+
+    <form th:method="DELETE" th:action="@{/contracts/{id}(id=${contract.getId()})}">
+        <input type="submit" value="Удалить"/>
+    </form>
+
+    <div th:if="${contract.active != true}">
+        <form th:method="PATCH" th:action="@{/contracts/{id}/unlocking(id=${contract.getId()})}">
+            <input type="submit" value="Разблокировать контракт"/>
+        </form>
+    </div>
+    </div>
+
+    <div th:if="${contract.active == true}">
+<!--        <div sec:authorize="hasRole('ROLE_USER')">-->
+            <form th:method="GET" th:action="@{/contracts/{id}/change-tariff(id=${contract.getId()})}">
+                <input type="submit" value="Поменять тариф"/>
+            </form>
+<!--        </div>-->
+
+        <form th:method="PATCH" th:action="@{/contracts/{id}/blocking(id=${contract.getId()})}">
+            <input type="submit" value="Заблокировать контракт"/>
+        </form>
+    </div>
+
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+    <hr/>
+
+    <form th:method="GET" th:action="@{/contracts/}">
+        <input type="submit" value="Все контракты"/>
+    </form>
+
+    </div>
+
+    <hr/>
+
+
+    <form th:method="GET" th:action="@{/lk/}">
+        <input type="submit" value="Вернуться в личный кабинет"/>
+    </form>
+
+    <form th:href="@{#}" th:onclick="history.go(-1)">
+        <input type="submit" value="Вернуться на предыдущую страницу"/>
+    </form>
+
+</body>
+
+</html>

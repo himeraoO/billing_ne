@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+</head>
+
+<body>
+
+    <!--/*@thymesVar id="tariff" type="com.teapot.mrw.billing_ne.model.Tariff"*/-->
+    <p th:text="${tariff.getName() + ', ' + tariff.getPrice()}">VALUE</p>
+
+    <hr/>
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <div th:if="${tariff.active == true}">
+            <p>Тариф активен</p>
+            <hr/>
+        </div>
+    </div>
+
+    <div th:if="${tariff.active != true}">
+        <p>Тариф закрыт для подключения</p>
+        <hr/>
+    </div>
+
+    <div th:if="${tariff.tariffOptionList.isEmpty()}">
+        <p>У тарифа нет подключенных опций</p>
+        <hr/>
+    </div>
+
+    <div th:if="${!tariff.tariffOptionList.isEmpty()}">
+        <hr/>
+        <b>Подключенные опции:</b>
+        <br/>
+        <table th:each="tariffOption : ${tariff.tariffOptionList}">
+            <tr th:text="${tariffOption.getName()}">tariffOption</tr>
+        </table>
+        <hr/>
+
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+
+            <div th:if="${tariff.tariffOptionList.isEmpty}">
+                <p>Нет опций доступных для отключения</p>
+                <hr/>
+            </div>
+
+            <div th:if="${!tariff.tariffOptionList.isEmpty}">
+                <span>Какую опцию отключить?</span>
+                <form th:method="PATCH" th:action="@{/tariffs/{id}/release(id=${tariff.getId()})}">
+                    <label for="tariffOptionRemove">Выберите опцию для отключения</label>
+                    <!--/*@thymesVar id="tariffOption" type="com.teapot.mrw.billing_ne.model.TariffOption"*/-->
+                    <select th:object="${tariffOption}" th:field="*{id}" id="tariffOptionRemove">
+                        <option th:each="tariffOptionRemove : ${tariff.tariffOptionList}" th:value="${tariffOptionRemove.getId()}" th:text="${tariffOptionRemove.getName()}">
+                        </option>
+                    </select>
+                    <input type="submit" value="Отключить опцию"/>
+                </form>
+            </div>
+
+        </div>
+        <hr/>
+    </div>
+
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <!--/*@thymesVar id="tariffOptions" type="java.util.List<com.teapot.mrw.billing_ne.model.TariffOption>"*/-->
+        <div th:if="${!tariffOptions.isEmpty}">
+            <span>Добавить новую опцию? Какую выбрать опцию?</span>
+            <form th:method="PATCH" th:action="@{/tariffs/{id}/assign(id=${tariff.getId()})}">
+                <label for="tariffOption">Выберите опцию</label>
+                <!--/*@thymesVar id="tariffOption" type="com.teapot.mrw.billing_ne.model.TariffOption"*/-->
+                <select th:object="${tariffOption}" th:field="*{id}" id="tariffOption">
+                    <option th:each="tariffOption : ${tariffOptions}" th:value="${tariffOption.getId()}" th:text="${tariffOption.getName()}">
+                    </option>
+                </select>
+                <input type="submit" value="Выбрать опцию"/>
+            </form>
+        </div>
+
+        <div th:if="${tariffOptions.isEmpty}">
+            <p>Нет опций доступных для подключения</p>
+            <hr/>
+        </div>
+
+        <form th:method="GET" th:action="@{/tariffs/{id}/edit(id=${tariff.getId()})}">
+            <input type="submit" value="Редактировать"/>
+        </form>
+
+        <form th:method="DELETE" th:action="@{/tariffs/{id}(id=${tariff.getId()})}">
+            <input type="submit" value="Удалить"/>
+        </form>
+    </div>
+
+    <hr/>
+
+    <form th:method="GET" th:action="@{/tariffs/}">
+        <input type="submit" value="Все тарифы"/>
+    </form>
+
+    <hr/>
+
+    <form th:method="GET" th:action="@{/lk/}">
+        <input type="submit" value="Вернуться в личный кабинет"/>
+    </form>
+
+<!--////////-->
+<!--    ссылка-->
+<!--    <a href="#" onclick="history.go(-1)">Go Back</a>-->
+<!--    ссылка-->
+
+<!--    кнопка-->
+    <form th:href="@{#}" th:onclick="history.go(-1)">
+        <input type="submit" value="Вернуться на предыдущую страницу"/>
+    </form>
+<!--    кнопка-->
+<!--////////-->
+
+
+</body>
+
+</html>

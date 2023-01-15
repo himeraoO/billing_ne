@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Main Page</title>
+</head>
+
+<body>
+
+    <p>Добро пожаловать к нам на чай</p>
+
+    <form th:method="GET" th:action="@{/auth/login}">
+        <input type="submit" value="Авторизироваться"/>
+    </form>
+
+    <form th:method="GET" th:action="@{/auth/registration}">
+        <input type="submit" value="Зарегистрироваться"/>
+    </form>
+
+</body>
+
+</html>

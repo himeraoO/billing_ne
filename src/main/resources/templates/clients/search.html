@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+</head>
+<body>
+
+<!--/*@thymesVar id="query" type="com.teapot.mrw.billing_ne.dto.SearchDTO"*/-->
+<form th:method="POST" th:action="@{/clients/search}" th:object="${query}">
+
+    <label for="query">Введите (номер контракта) поисковой запрос: </label>
+    <input type="text" th:field="*{number}" id="query"/>
+    <div style="color:red" th:if="${#fields.hasErrors('number')}" th:errors="*{number}">Number Error</div>
+
+    <br/>
+
+    <input type="submit" value="Искать!"/>
+</form>
+
+<!--/*@thymesVar id="clients" type="java.util.List<com.teapot.mrw.billing_ne.model.Client>"*/-->
+<div th:if="${clients}">
+    <div th:if="${clients.isEmpty()}">
+        <span>Клиенты не найдены</span>
+    </div>
+
+    <div th:each="client : ${clients}">
+        <a th:href="@{/clients/{id}(id=${client.getId()})}"
+           th:text="${client.getName() + ', ' + client.getSurname()}">client</a>
+        <hr/>
+    </div>
+</div>
+
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+
+    <br/>
+    <hr/>
+    <form th:method="GET" th:action="@{/clients/}">
+        <input type="submit" value="Вернуться к просмотру всех клиентов"/>
+    </form>
+    <hr/>
+    <br/>
+
+    <form th:method="GET" th:action="@{/lk/}">
+        <input type="submit" value="Вернуться в личный кабинет"/>
+    </form>
+</div>
+
+</body>
+</html>

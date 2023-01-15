@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS client;
+
+CREATE TABLE IF NOT EXISTS client (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(45) NOT NULL,
+    surname VARCHAR(45) NOT NULL,
+    date_of_birth VARCHAR(64) NOT NULL,
+    passport_data VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    email VARCHAR(55) NOT NULL,
+    password VARCHAR(45) NOT NULL,
+    PRIMARY KEY (id))
+ENGINE = InnoDB;
